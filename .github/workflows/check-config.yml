@@ -17,3 +17,13 @@ jobs:
           echo "Starting the test..."
           grep "listen" nginx.conf
           echo "Test passed: A port is configured."
+
+      - name: Security Scan for AWS Keys
+        run: |
+          echo "Scanning repository for AWS keys..."
+          if grep -r --exclude-dir=".github" "AKIA" .; then
+            echo "Security Alert: Hardcoded AWS keys found in the repository!"
+            exit 1
+          else
+            echo "No hardcoded AWS keys found."
+          fi
